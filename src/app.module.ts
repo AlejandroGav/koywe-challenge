@@ -10,7 +10,7 @@ import { QuoteController } from './app.controller';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/koywe-challenge'),
     DalModule,
   ],
   controllers: [QuoteController],
@@ -18,7 +18,6 @@ import { QuoteController } from './app.controller';
     QuoteFacade,
     QuoteService,
     ExchangeRateProvider,
-    QuoteRepository,
   ],
 })
 export class AppModule {}
