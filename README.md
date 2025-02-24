@@ -236,3 +236,5 @@ El uso de IA debe ser un complemento para mejorar la eficiencia del desarrollo, 
 ---
 
 ### 🚀 ¡Buena suerte y a codificar! 👩‍💻👨‍💻
+
+Este repositorio es un fork del repositorio original y ha sido clonado para el desarrollo de la prueba técnica.
