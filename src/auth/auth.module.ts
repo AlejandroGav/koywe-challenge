@@ -11,7 +11,7 @@ import { UserService } from '../bll/user.service';
     imports: [
         PassportModule,
         JwtModule.register({
-            secret: process.env.JWT_SECRET || "secretJWT123",
+            secret: process.env.JWT_SECRET,
             signOptions: { expiresIn: '60m' },
         }),
         UserModule
