@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { QuoteFacade } from './facades/quote.facade';
 import { CreateQuoteDto } from './models/dtos/create-quote.dto';
 
 @Controller('quote')
+@UseGuards(AuthGuard('jwt'))
 export class QuoteController {
   constructor(private readonly quoteFacade: QuoteFacade) {}
 
