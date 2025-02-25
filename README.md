@@ -22,7 +22,7 @@ Este proyecto es una aplicación back-end desarrollada con NestJS que expone end
 ## Características
 
 - **Conversión de Divisas:**  
-  Endpoints para crear y consultar cotizaciones, calculando el monto convertido usando una tasa obtenida (simulada o real).
+  Endpoints para crear y consultar cotizaciones, calculando el monto convertido usando una tasa obtenida (en esta ocasion de forma simulada, consultando).
 
 - **Seguridad:**  
   Implementación de autenticación con JWT para proteger los endpoints.  
@@ -69,6 +69,58 @@ JWT_SECRET=miClaveSuperSecreta!2025
 **Nota:**  
 - En Docker Compose se utiliza el valor definido en la sección `environment` del servicio.  
 - Si ejecutas la aplicación localmente (sin Docker) asegúrate de tener un archivo `.env` y cargarlo con `dotenv` en `main.ts`.
+
+Aquí te dejo la sección adicional que puedes incluir en el README, bajo un título como "Consulta a Proveedor de Precios", explicando que en este proyecto se simula la respuesta y cómo se realizaría la consulta real:
+
+---
+
+### Consulta a Proveedor de Precios
+
+La API está diseñada para obtener en tiempo real la tasa de conversión (rate) consultando a un proveedor de precios externo. Por ejemplo, se consideró la siguiente URL para obtener la tasa de conversión:
+
+```
+https://api.exchange.cryptomkt.com/api/3/public/price/rate?from={to}&to={from}
+```
+
+donde se reemplazarían `{from}` y `{to}` por los códigos de las monedas de origen y destino, respectivamente.
+
+**Implementación Actual (Simulación):**
+
+- **Simulación:**  
+  En la implementación actual, se simula la respuesta del proveedor de precios. Esto significa que, en lugar de hacer una llamada HTTP real a la API, se retorna un valor fijo (por ejemplo, `0.0000023`).  
+  Esta simulación permite probar la funcionalidad sin depender de la disponibilidad o posibles limitaciones de la API externa.
+
+**Cómo se Realizaría la Consulta Real:**
+
+Para integrar la API real, se podrían seguir estos pasos:
+
+1. **Realizar una solicitud HTTP:**  
+   Utilizar una librería como [Axios](https://axios-http.com/) o el módulo nativo `http`/`https` de Node.js para enviar una petición GET a la URL:
+   ```typescript
+   import axios from 'axios';
+
+   async function getExchangeRate(from: string, to: string): Promise<number> {
+     try {
+       const response = await axios.get(
+         `https://api.exchange.cryptomkt.com/api/3/public/price/rate?from=${to}&to=${from}`
+       );
+       // Suponiendo que la respuesta tenga la propiedad "rate"
+       return response.data.rate;
+     } catch (error) {
+       // Manejar el error o retornar un valor por defecto
+       throw new Error('Error al obtener la tasa de conversión');
+     }
+   }
+   ```
+2. **Validar la respuesta:**  
+   Se debería validar que la respuesta de la API contenga la información esperada (por ejemplo, verificar que `response.data.rate` exista y sea un número válido).
+
+3. **Integrar en el flujo de negocio:**  
+   Reemplazar la lógica de simulación por la llamada a `getExchangeRate` en el servicio o en la fachada (facade) que gestiona la creación de la cotización.
+
+4. **Manejo de errores:**  
+   Implementar un manejo adecuado de errores en caso de que la API externa no responda o devuelva un error, incluyendo la posibilidad de simular o retornar un valor por defecto mientras se notifica el problema.
+
 
 ## Levantamiento de la Aplicación
 
