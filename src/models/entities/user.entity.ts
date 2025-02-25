@@ -3,7 +3,15 @@ import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema()
+@Schema({
+        toJSON: {
+        transform: (doc, ret) => {
+            delete ret.password;
+            return ret;
+        },
+        },
+})
+
 export class User {
     @Prop({ required: true, unique: true })
     username: string;
